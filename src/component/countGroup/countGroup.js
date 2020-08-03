@@ -1,6 +1,10 @@
 import React from "react";
 import Counter from "../conter/Counter";
+import {createStore} from "redux";
+import {decreaseTodo, increaseTodo, resetTodo} from "../actions";
+import counterCombineReducers from "../reducers";
 
+const store  = createStore(counterCombineReducers)
 class CountGroup extends React.Component {
     constructor(props) {
         super(props);
@@ -13,30 +17,34 @@ class CountGroup extends React.Component {
 
     handleResize = (event) => {
         const num = event.target.value ? parseInt(event.target.value) : 0;
+        store.dispatch(resetTodo(0));
         this.setState({
             size: num,
-            totalValue: 0,
+            totalValue: store.getState().counterReducers,
             countNumber: Array(num).fill(0),
         })
     }
 
     handleDecrease(key){
+        const num = 12;
+        store.dispatch(decreaseTodo(num))
         const countNumber = this.state.countNumber.slice();
-        countNumber[key] = countNumber[key] - 1.
+        countNumber[key] = countNumber[key] - num;
         this.setState((preState) => ({
             size: preState.size,
-            totalValue: preState.totalValue - 1,
+            totalValue: store.getState().counterReducers,
             countNumber:countNumber,
         }))
     }
 
     handleIncrease = (key) => {
-        console.log(key)
+        const num = 16;
+        store.dispatch(increaseTodo(num))
         const countNumber = this.state.countNumber.slice();
-        countNumber[key] = countNumber[key]+1;
+        countNumber[key] = countNumber[key]+num;
         this.setState((preState) => ({
             size: preState.size,
-            totalValue: preState.totalValue + 1,
+            totalValue: store.getState().counterReducers,
             countNumber:countNumber,
         }))
     }
